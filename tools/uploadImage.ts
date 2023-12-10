@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run -A
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-net --allow-run
 import AWS from "npm:aws-sdk";
 import * as cb from "https://deno.land/x/copy_paste/mod.ts";
 
@@ -15,7 +15,6 @@ const s3 = new AWS.S3({
 // // do upload path from arg or clipboard
 
 const filepath = Deno.args[0] ?? (await cb.readText());
-console.log(filepath);
 const filename = filepath.split("/").pop();
 const ext = filename?.split(".").pop();
 if (["png", "jpg", "jpeg", "gif"].indexOf(ext!) === -1) {
@@ -32,7 +31,7 @@ await s3
   })
   .promise();
 
-// copy result URL into clipboard
+// stdout markdown image link
 const url = encodeURI(`${Deno.env.get("R2_BUCKET_URL")!}/${filename}`);
 const markdownImg = `![${filename}](${url})`;
 console.log(markdownImg);
