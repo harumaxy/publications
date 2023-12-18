@@ -48,3 +48,6 @@ sparse checkout という技を使うと、git submoduleの一部分のフォル
 
 blog用のファイルを編集したときに、ホームページのGithub Actionからデプロイを発火する  
 (dispatch workflow を設定すれば行けそうだが、まだやってない)
+
+
+
