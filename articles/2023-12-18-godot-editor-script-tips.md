@@ -95,6 +95,9 @@ func _run() -> void:
 ![スクリーンショット 2023-12-19 0.48.17.png](https://blog-images.harumaxy.com/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-12-19%200.48.17.png)
 
 ```gdscript
+@tool
+extends EditorScript
+
 func _run() -> void:
   var scene = get_scene() # 現在開いているactiveなシーンを取得
   
@@ -136,6 +139,9 @@ Godot 4 になり、アニメーション機能がかなり強化された。
 
 フィルタを適用したいBlendTreeNodeが増えるたびにこの作業をしていくと、クリック回数がかなり増える...作業効率が悪い。
 
+そこで、 EditorScript を実行してこのフィルター設定を自動化してみることにした。
+
+
 ```gdscript
 @tool
 extends EditorScript
@@ -152,7 +158,11 @@ func _run():
   copy_filters("BlendNode1", ["BlendNode2"])
 ```
 
-上記のスクリプトを実行することで、コピー元の最初の1つだけ手動で設定すれば、それ移行は同じフィルターを設定したい場合は機械的にコピーできるので楽。
+上記のスクリプトを実行することで、あるBlendTreeNodeから別のノードへ、フィルター設定をコピーできる。
+
+完全自動ではなく、コピー元の最初の1つは手動で設定する必要はあるけれども...2つ目以降は楽になる。
+
+
 
 もしくは、`filters`プロパティを print すると String Array で出力されるので、それをフィルターセットの値としてどこかに保存して使い回すという手もある。
 
