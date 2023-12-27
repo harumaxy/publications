@@ -7,5 +7,5 @@ summary: "summary"
 tags: []
 thumbnail_url: ""
 foam_template: 
-  filepath: "/Users/masaharuhosomichi/ghq/github.com/harumaxy/memos/blog/$FOAM_DATE_YEAR/$FOAM_DATE_MONTH_NAME_SHORT/$FOAM_TITLE.$FOAM_DATE_YEAR-$FOAM_DATE_MONTH-$FOAM_DATE_DATE.md"
+  filepath: "blog/$FOAM_DATE_YEAR/$FOAM_DATE_MONTH_NAME_SHORT/$FOAM_TITLE.$FOAM_DATE_YEAR-$FOAM_DATE_MONTH-$FOAM_DATE_DATE.md"
 ---
