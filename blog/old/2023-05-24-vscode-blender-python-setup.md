@@ -84,7 +84,9 @@ Python 標準の `print` 関数は標準出力されるため、Blenderウィン
 MacOS, Linux の場合はターミナルから Blender バイナリを実行することで、ターミナルに標準出力が表示される。<br>
 Windosの場合は Window > Toggle System Console
 
-または、Blender で開いてるエリアから Python Console を探してデータを出力するように print 関数を override する方法もある。
+~~または、Blender で開いてるエリアから Python Console を探してデータを出力するように print 関数を override する方法もある。~~
+
+下のスクリプトは Blender 4.0 で動かなくなったので、ターミナルからBlenderを起動して標準出力を見る方法の方がより簡単なので
 
 ```py
 import bpy
