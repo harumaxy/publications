@@ -2,7 +2,7 @@
 title: "Fly.io で UDP ゲームサーバー(Godot)をデプロイ・スケーリングする方法"
 emoji: "🎈"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["flyio", "udp", "godot"]
+topics: ["flyio", "udp", "godot", "docker"]
 published: true
 ---
 
