@@ -1,5 +1,5 @@
 ---
-title: "Fly.io で UDP ゲームサーバーをデプロイ・スケーリングする方法"
+title: "Fly.io で UDP ゲームサーバー(Godot)をデプロイ・スケーリングする方法"
 emoji: "🎈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flyio", "udp", "godot"]
@@ -12,7 +12,9 @@ published: true
 https://fly.io/docs/
 
 
-この記事で使用している Godot のバージョンは v4.2.1.stable です
+多分、ここで実践していることはゲームサーバーに限らない UDP サービスで同様に使えると思う。
+
+> この記事で使用している Godot のバージョンは v4.2.1.stable です
 
 
 ## Fly.io での UDP アプリケーションのデプロイ
