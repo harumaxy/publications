@@ -235,7 +235,7 @@ flyctl deploy --image-label latest
 ```
 
 
-#### Fly Machine の効率的な軌道
+#### Fly Machine の効率的な起動
 
 ドキュメントによると、Fly Machine の start/stop のほうが create/destroy と比べてかなり速い。  
 利用されるサーバー数を事前に予測できるなら、足りなくなるまえに事前に作成しておいて start,または使い終わった Machine は破棄せず stop して再利用するとアプリケーションのスケーリングが高速化するかも。
