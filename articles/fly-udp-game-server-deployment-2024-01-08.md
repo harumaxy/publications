@@ -3,7 +3,7 @@ title: "Fly.io で UDP ゲームサーバーをデプロイ・スケーリング
 emoji: "🎈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flyio", "udp", "godot"]
-published: false
+published: true
 ---
 
 時代はコンテナなので、Godotで作成したゲームサーバーをDockerizeしてホスティングできるサービスが無いかと考えたところ、仕事でも使ってる Fly.io が良さげだった。  
