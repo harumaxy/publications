@@ -51,7 +51,9 @@ app = "godot-game-server-pool"
 primary_region = "nrt"
 
 [build]
-PORT=5000
+
+[env]
+PORT = "5000"
 
 [[services]]
 protocol = "udp"
@@ -64,9 +66,10 @@ port = 5000
 cpu_kind = "shared"
 cpus = 1
 memory_mb = 256
+
 ```
 
-[Fly で UDPトラフィックを受診するには、外部/内部で同じポートでlistenする必要がある](https://fly.io/docs/app-guides/udp-and-tcp/#udp-must-listen-on-the-same-port-externally-and-internally)
+[Fly で UDPトラフィックを受信するには、外部/内部で同じポートでlistenする必要がある](https://fly.io/docs/app-guides/udp-and-tcp/#udp-must-listen-on-the-same-port-externally-and-internally)
 
 ```sh
 flyctl launch
