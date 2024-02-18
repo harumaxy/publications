@@ -6,7 +6,7 @@ topics: ["flyio", "udp", "godot", "docker"]
 published: true
 ---
 
-時代はコンテナなので、Godotで作成したゲームサーバーをDockerizeしてホスティングできるサービスが無いかと考えたところ、仕事でも使ってる Fly.io が良さげだった。  
+時代はコンテナなので、Godotで作成したゲームサーバーをDockerizeしてホスティングできるサービスが無いかと考えたところ、仕事でも使ってる Fly.io が良さげだった。
 仕事で使ってるものの、あんまり詳しくないのでこれを機に色々調べて実践してみる。
 
 https://fly.io/docs/
@@ -77,12 +77,12 @@ flyctl deploy
 flyctl ips allocate-v4
 ```
 
-Fly.io のアプリを作成するとデフォルトで IPv6 が割り当てられるが、現在(2024年1月時点)では[Fly.ioでの UDP over IPv6 がサポートされていない](https://fly.io/docs/app-guides/udp-and-tcp/#udp-wont-work-over-ipv6)。  
+Fly.io のアプリを作成するとデフォルトで IPv6 が割り当てられるが、現在(2024年1月時点)では[Fly.ioでの UDP over IPv6 がサポートされていない](https://fly.io/docs/app-guides/udp-and-tcp/#udp-wont-work-over-ipv6)。
 UDP アプリケーションは専用IPv4アドレスを割り当てる必要がある。(有料 2$/mo)
 
-更に、UDPサーバーの場合は `0.0.0.0` とか `*` とかではなく、この[割り当てた専用IPv4アドレスをbindする必要がある](https://fly.io/docs/app-guides/udp-and-tcp/#udp-wont-work-over-ipv6)。
+更に、UDPサーバーの場合は `0.0.0.0` とか `*` とかではなく、`fly-global-services`ホストをバインドする必要がある。
 
-UDPサーバーマシンを起動すると、 `/etc/hosts` に `{専用ipv4}  fly-global-services` が追加される。
+UDPサーバーマシンを起動すると、 `/etc/hosts` に `fly-global-services` が追加される。
 ただし、Godotでゲームサーバーを立てる際はホスト名でリッスンできないので、IPアドレスを取り出して環境変数で渡すようにする。
 
 ```Dockerfile
@@ -148,7 +148,7 @@ func start_client():
 
 ```
 
-デプロイしたサーバーへの接続を試すには以下のコマンド  
+デプロイしたサーバーへの接続を試すには以下のコマンド
 (Godot の実行ファイルに alias を貼っておくのを前提とする)
 
 ```sh
@@ -158,11 +158,11 @@ godot --headless -d main.tscn --client
 
 ## UDPサーバーをスケールアウトする
 
-実際にゲームサービスを運用するとなると、プレイヤーの数に応じてゲームサーバーを増やす必要がある。  
+実際にゲームサービスを運用するとなると、プレイヤーの数に応じてゲームサーバーを増やす必要がある。
 ゲームサーバーマネージャー的な別の Fly App を立ち上げるのがベターだが、ここでは簡単にシェルスクリプトでやってみる。
 
 #### NGな方法
-app のコンフィグによる `flyctl scale` コマンドだと、同じポート設定のままマシンを増やすので良くない。  
+app のコンフィグによる `flyctl scale` コマンドだと、同じポート設定のままマシンを増やすので良くない。
 試したところ、 5000 ポートをリッスンしているので `{app_name}.fly.dev:5000` にUDPを飛ばすと同じポートをlistenするマシンにラウンドロビン方式で順番にUDPリクエストが振り分けられる。
 
 Webサーバーのようなステートレスなものなら問題ないが、リアルタイムゲームのサーバーのようなステートフルなものは接続を確立した特定の同じマシンに毎回リクエストを送りたい。
@@ -223,12 +223,12 @@ curl -X POST \
   "https://api.machines.dev/v1/apps/{app_name}/machines"
 ```
 
-これで作成すると、 `{app_name}.fly.dev:5001` のドメインからアクセスできるUDPゲームサーバーが立ち上がる。  
+これで作成すると、 `{app_name}.fly.dev:5001` のドメインからアクセスできるUDPゲームサーバーが立ち上がる。
 更に増やしたいときは `5002, 5003, 5004...` と既に立てたサーバーと被らないポートを設定していく。
 
 #### flyctl deploy するときの docker image ラベル
 
-そのまま `flyctl deploy` すると、Deployment ID を含んだラベルになる。  
+そのまま `flyctl deploy` すると、Deployment ID を含んだラベルになる。
 例. `registry.fly.io/{app_name}:deployment-xxxx`
 
 この Deployment ID を調べるのが面倒なので、毎回 `:latest` ラベルを付けてデプロイしておく
@@ -240,7 +240,7 @@ flyctl deploy --image-label latest
 
 #### Fly Machine の効率的な起動
 
-ドキュメントによると、Fly Machine の start/stop のほうが create/destroy と比べてかなり速い。  
+ドキュメントによると、Fly Machine の start/stop のほうが create/destroy と比べてかなり速い。
 利用されるサーバー数を事前に予測できるなら、足りなくなるまえに事前に作成しておいて start,または使い終わった Machine は破棄せず stop して再利用するとアプリケーションのスケーリングが高速化するかも。
 
 https://fly.io/docs/apps/scale-count/
@@ -262,7 +262,7 @@ https://fly.io/docs/reference/dynamic-request-routing/
 - https://fly.io/blog/replicache-machines-demo/
 
 
-UDPのほうが通信速度は速いが、WebSocketはHTTP関連のサポートの恩恵を受けられるしブラウザでも動作するので、トレードオフ。  
+UDPのほうが通信速度は速いが、WebSocketはHTTP関連のサポートの恩恵を受けられるしブラウザでも動作するので、トレードオフ。
 Fly.io でホストすることを考えても、UDPサービスはWebSocketと比べてポートの管理が若干複雑な気がするので、それを考えなくていいというのもある。
 
 ちなみに Godot では WebScoket peer を用いたマルチプレイヤーも可能。
