@@ -16,5 +16,8 @@
     {
       "path": "books/"
     }
-  ]
+  ],
+  "settings": {
+    "biome.enabled": true
+  }
 }
