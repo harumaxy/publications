@@ -3,11 +3,17 @@ title: "GraphQLサーバーは実装するな、代わりにSQLを書け"
 emoji: "⚠️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [postgraphile, GraphQL, nodejs, PostgreSQL]
-published: false
+published: true
 ---
 
 
 遅ればせながら、2024年にもなって初めてGraphQLサーバー実装周りを勉強し始めたので思ったことを書く
+
+# TL;DR
+
+GraphQL API を実装するな
+PostGraphile を使え
+DB駆動開発せよ
 
 ## GraphQLに求められること
 
@@ -58,6 +64,17 @@ DBテーブル定義からAPIを自動生成するというのは、車輪の再
 
 おそらくこれを手動で実装するには、クエリ計画やGraphQLリゾルバー実装のハックが必要でハードルが高い。
 が、これらのツールを使うことで容易にパフォーマンスの高いGraphQLサーバーを実装することが出来る。
+
+
+||PostGraphile, Hasura によるAPI自動生成|
+|---|---|
+|型生成|⭕️ 自動でSDL及び実装を生成する、余計なコード生成の依存も不要|
+|汎用性|⭕️|
+|実装の容易さ|⭕️ 実装の手間なし、GraphQLを自動で効率的なSQLに変換|
+|クエリの柔軟性|⭕️|
+
+欠点だった `型生成` 及び `実装` の手間がほぼゼロコストになる。
+
 
 ## DB駆動開発
 
@@ -189,3 +206,7 @@ tRPC_server <|-- Frontend
   - PostgreSQLなら、セキュリティはDBにある Role と Row Level Security で実現するべし
   - バリデーションやセキュリティをDB側でしっかり作っておけば、アプリが複数あっても実装の重複を減らせるしDBレベルで安全 
 - 自動実装されたAPIの不自由さは別のtRPCサーバーを立てて補う(複雑なlogicやmutationなど)
+
+
+気が向いたらDB駆動のAPI開発の実践的なテクもまとめたい
+(SQL関数とかTriggerの使い方的な)
