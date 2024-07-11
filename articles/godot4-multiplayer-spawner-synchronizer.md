@@ -128,7 +128,7 @@ peerの接続があった際に、サーバー側の処理でPlayerSceneをイ�
 特定のNodeのプロパティを監視し、その変更をリモートに同期する。
 `MultiplayerSpawner`で生成されるSceneNodeに含んでおく。
 
-![](https://i.gyazo.com/0be187c294ea7aa02690d42aecbbe602.png)
+![スクリーンショット 2024-07-11 18.02.24.png](https://blog-images.harumaxy.com/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202024-07-11%2018.02.24.png)
 
 プロパティ設定
 
