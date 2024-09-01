@@ -1,11 +1,10 @@
 ---
 slug: "801511a3-33a7-45f9-be82-d706ce3181ab"
 title: "ObsidianやめてVSCodeに戻った"
-published_at: "2023-12-11T02:38:07Z"
-is_slide: false
-summary: "summary"
+thumbnail: null
+draft: false
+published_at: 2023-12-11T02:38:07Z
 tags: ["markdown", "foam", "vscode"]
-thumbnail_url: ""
 ---
 
 ## Obsidian

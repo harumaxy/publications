@@ -2,10 +2,9 @@
 slug: "3f44a5c6-ce99-4ea1-bd9c-535e71ee9b3b"
 title: "BlenderでGLTFをインポート、エクスポートするときのアニメーションの名前"
 published_at: "2023-12-28T00:04:26Z"
-is_slide: false
-summary: "summary"
+draft: false
+thumbnail: 'https://blog-images.harumaxy.com/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-12-28%200.05.40.png'
 tags: ["blender", "gltf", "nla"]
-thumbnail_url: "https://blog-images.harumaxy.com/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%202023-12-28%200.05.40.png"
 ---
 
 

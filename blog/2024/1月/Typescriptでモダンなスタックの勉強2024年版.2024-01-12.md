@@ -20,8 +20,6 @@ thumbnail_url: ""
 - LiteFS (SQLite)
 
 
-
-
 ## Bun
 
 Node, Deno に続くサーバーサイドの JS/TS ランタイム
@@ -46,8 +44,7 @@ Node, Deno に続くサーバーサイドの JS/TS ランタイム
   - JSX で SSR、サーバーコンポーネント
   - Swagger を自動生成
   
-Hono でもいいかも  
-(Bun がエッジで動くかわからないので、ランタイムの選択肢が狭まる)
+Hono でもいいかも(僅かなパフォーマンスの差)
 
 ## Drizzle ORM
 
@@ -59,25 +56,15 @@ Hono でもいいかも
 ## htmx
 
 - HTML 志向のライブラリ
-- HTMLタグの属性を使って、DOMに機能を追加する
-  - 基本の流れ
-    - イベントをlisten,trigger
-    - HTTPリクエストを送信
-    - レスポンスのHTMLでDOMツリーをSwap
+  - イベントをlisten,trigger
+  - HTTPリクエストを送信
+  - レスポンスのHTMLでDOMツリーをSwap
 - できることはシンプルかつ完結だが、気を付けないと危険
-
-CSS selector で要素を選んで swap するのだが、これは手続き的なMutationということになる  
-React の宣言的で安全なUIに比べると、UIが崩壊しやすく危険  
-
-あと、TypeScript/TSXサポートが薄い気がする(HTML志向なので当然？)  
-Github Copilot などと合わせるといいかも
-
-サーバーが返すHTMLで描画を更新するので、純粋なフロントエンドフレームワークとは言い難いかも  
-自由に描画内容を操作するにはSSRバックエンドが必要な気がする。  
-HTMLオンリーではあまり動的なアプリは作れなさそう
-
-メリットとしては、
-
-- できることがシンプル、記述が簡潔
 - JSを書く必要が少ない(SSRバックエンドは書くが)
 - Reactよりはライブラリが軽量？(Preactよりは重い)
+
+## litefs
+
+- 複数のマシンのファイルシステム上のSQLiteを同期する仕組み
+  - つまりDBのレプリケーション
+- Cloudflare D1 や Turso など類似のSaaSがあり、分散SQLiteが流行っている
