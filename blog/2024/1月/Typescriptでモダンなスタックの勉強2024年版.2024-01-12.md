@@ -2,10 +2,9 @@
 slug: "0d7005a0-6fdd-4cec-ad39-ee82663c8719"
 title: "Typescriptでモダンなスタックの勉強 2024年版"
 published_at: "2024-01-12T16:31:34Z"
-is_slide: false
-summary: "summary"
 tags: [bun, typescript, drizzle, litefs, sqlite, htmx, jsx]
-thumbnail_url: ""
+thumbnail: null
+draft: false
 ---
 
 

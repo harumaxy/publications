@@ -1,10 +1,6 @@
 {
   "folders": [
     {
-      "name": "root",
-      "path": "."
-    },
-    {
       "path": "blog/"
     },
     {
@@ -12,9 +8,6 @@
     },
     {
       "path": "articles/"
-    },
-    {
-      "path": "books/"
     }
   ],
   "settings": {

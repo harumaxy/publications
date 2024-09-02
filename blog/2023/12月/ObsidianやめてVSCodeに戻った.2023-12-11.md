@@ -7,7 +7,7 @@ published_at: 2023-12-11T02:38:07Z
 tags: ["markdown", "foam", "vscode"]
 ---
 
-## Obsidian
+## 備考: Obsidianとは？
 - Markdown Editor
 - Markdownで作った文書をタグ付けで管理できる
 - マインドマップのようなグラフ表示もできる
@@ -15,7 +15,7 @@ tags: ["markdown", "foam", "vscode"]
 
 といった、ノートを取るのに特化したようなアプリ
 
-最近ちょっと使ってたましたが、やっぱりVSCodeに戻った。
+最近ちょっと使ってたが、やっぱりVSCodeに戻った。
 
 
 Obsidianの売りであるグラフ表示が[Foam](https://foambubble.github.io/foam/)というVSCodeの拡張機能で実現できるので、それを抜いたらテキスト編集(markdown含む)はほとんどVSCodeのほうが上位互換なため。

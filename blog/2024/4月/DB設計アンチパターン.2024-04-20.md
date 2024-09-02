@@ -2,10 +2,10 @@
 slug: "abd4e79d-b05c-4c93-9d84-bbac5d10154f"
 title: "DB設計アンチパターン"
 published_at: "2024-04-20T16:13:42Z"
-is_slide: false
-summary: "summary"
 tags: []
-thumbnail_url: ""
+thumbnail: null
+draft: false
+
 ---
 
 

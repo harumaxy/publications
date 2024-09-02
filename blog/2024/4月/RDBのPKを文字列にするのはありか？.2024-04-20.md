@@ -2,10 +2,9 @@
 slug: "7a000d01-559c-43b4-a080-6d0b32eada9b"
 title: "RDBのPKを文字列にするのはありか？"
 published_at: "2024-04-20T15:49:03Z"
-is_slide: false
-summary: "summary"
 tags: []
-thumbnail_url: ""
+thumbnail: null
+draft: false
 ---
 
 いわゆる、 surrogate key vs natural key の話。
@@ -37,7 +36,7 @@ https://qiita.com/n_yamadamadamada/items/f61e16d0c0fe22d683c4
   - それをPKにすればいい、別途 UNIQUE 制約をつけると別途インデックスが作成されて逆にサイズがデカくなる
 - id に寿命があるよ派
   - integer を PK にすると、2^31 件までしか登録できない
-  - 大量にカラムが作られる場合に不利
+  - 大量にデータが作られる場合に不利
 
 
 ## 実装によるよ派
