@@ -1,5 +1,5 @@
 ---
-title: "Elixir: Plug を簡単なサーバーを実装して理解する"
+title: "[Elixir] Plug を簡単なサーバーを実装して理解する"
 emoji: "🔌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["elixir", "plug", "phoenix"]
@@ -14,16 +14,14 @@ Elixir のキラーアプリといえば Phoenix Framework ですが、その We
 ## Plug とは
 
 Elixir で Web サーバーを扱うための抽象化を提供するライブラリです。
-サーバー実装自体は別のライブラリをアダプターを介して利用します。(CowBoy, Bandit など)
+サーバー実装自体は別のライブラリをアダプターを介して利用します。([Cowboy](https://github.com/ninenines/cowboy), [Bandit](https://github.com/mtrudel/bandit) など)
 
-この方式のメリットは、一度 Plug の使用方法を覚えれば今後　Erlang/Elixir エコシステムでもっと効率的なサーバー実装が出たとしてもライブラリの使用方法を学び直す必要が無いことでしょう。
-Plug が対応すればですが、 Plug は Elixir 公式プロジェクトなのでそのあたりの信頼は厚いと思っています。
+この方式のメリットは、Plug の使用方法さえ覚えてしまえば、今後 Erlang/Elixir エコシステムでもっと効率的なサーバー実装が出たとしてもライブラリの使用方法を学び直す必要が無く、同じ抽象化を利用できるということです。
+(Plug アダプターが必要ですが、 Plug は Elixir 公式プロジェクトなのでそのあたりの追従をする信頼は厚いと思っています。)
 
-Phoenix で利用されていますが、Phoenix 無しで Plug だけでもシンプルな Web サーバーの実装が可能です。
+Phoenix でも利用されていますが、Phoenix 無しで Plug だけでもシンプルな Web サーバーの実装が可能です。
 
-Elixir を採用したい人はまず Plug の使い方を学ぶのが良さそうです。
-
-
+Elixir で Web 開発をしたい人はまず Plug の使い方を学ぶのが良さそうです。
 
 ## セットアップ
 
@@ -31,26 +29,24 @@ Elixir を採用したい人はまず Plug の使い方を学ぶのが良さそ�
 mix new simple-server --app simple_server --sup
 ```
 
-```diff elixir
-# mix.exs
-
+```diff elixir:mix.exs
 defp deps do
 +  [{:bandit, "~> 1.0"}]
 end
 ```
-
+:::message
 豆知識: Bandit は Plug で利用することを想定して作られたサーバー実装であり、依存関係に Plug が含まれるので Bandit だけインストールすればOK
-
+:::
 
 ## 最初の Plug
 
 最初の Plug を実装します
 
-`init/1` と `call/2` コールバックを実装すれば、Plug として扱うことができます。
+任意のモジュールに `init/1` と `call/2` コールバックを実装すれば、Plug ビヘイビアとして扱うことができます。
 (単純なモジュールプラグを書くだけなら静的解析のため `@behaviour Plug` を宣言しておくのがおすすめ)
 
 
-```diff elixir
+```diff elixir:lib/simple_server.ex
 defmodule SimpleServer do
   @behaviour Plug
 
@@ -64,30 +60,35 @@ defmodule SimpleServer do
 end
 ```
 
-Application を編集して、 SimpleServer モジュールを plug として指定し、 Bandit サーバーを起動します。
+Application を編集して、 SimpleServer モジュールを plug として指定し、 Bandit サーバーを監視ツリーで起動します。
 
-```diff elixir
-# lib/simple_server/application.ex
-
+```diff elixir:lib/simple_server/application.ex
 defmodule SimpleServer.Application do
-+  require Logger
++ require Logger
   use Application
 
   @impl true
   def start(_type, _args) do
     children = [
-+      {Bandit, plug: SimpleServer, port: 4000}
++     {Bandit, plug: SimpleServer, port: 4000}
     ]
 
     opts = [strategy: :one_for_one, name: SimpleServer.Supervisor]
-+    Logger.info("server listening on http://localhost:4000")
++   Logger.info("server listening on http://localhost:4000")
     Supervisor.start_link(children, opts)
   end
 end
-
-# $curl http://localhost:4000
-# Hello, world!
 ```
+
+サーバーを起動します
+
+```sh
+mix run --no-halt
+
+curl http://localhost:4000 # => Hello, world!
+```
+
+
 
 これで、Plug を使用した Web サーバーを立ち上げることができました。
 
@@ -109,7 +110,8 @@ HTTPリクエスト/レスポンスに関する情報を含む `Plug.Conn.t()` �
 `Plug` ビヘイビアの以下のコールバック関数を実装したモジュールを Plug として扱うことができます
 
 - `init/1` : call/2 の第二引数に渡すオプションを定義するための関数
-- `call/2` : HTTPリクエストをハンドリングする関数。型で表すと `(Plug.Conn.t(), any()) :: Plug.Conn.t()`
+- `call/2` : HTTPリクエストをハンドリングする関数
+  - 型で表すと `(Plug.Conn.t(), any()) :: Plug.Conn.t()`
 
 関数プラグのほうが単純ですが、モジュールプラグにはマクロにより組み合わせプラグを簡潔に書く機能が提供されています。(後述)
 
@@ -119,19 +121,20 @@ HTTPリクエスト/レスポンスに関する情報を含む `Plug.Conn.t()` �
 
 モジュールプラグの `call/2` の説明にもなりますがパラメータについて説明すると、
 
-- 第一引数に conn, 第二引数に options を取る
-  - options は何でも渡せる。パラメータで関数の挙動を変更するのに使う
+- 第一引数が conn
+- 第二引数が options
+  - 何でも渡せるが、keyword list の場合が多い。パラメータで関数の挙動を変更するのに使う
 - 戻り値で conn を返す
 
 
 #### 関数プラグのパイプ
 
-Plug のメンタルモデルである `conn` を引数に取って変更を加えて `conn` を返す関数、というのは関数型プログラミング言語でよく採用されるパイプ演算子 `|>` と相性がいいです。
+Plug のメンタルモデルである、引数で `conn` を渡して変更を加えて `conn` を返す関数、というのは関数型プログラミング言語でよく採用されるパイプ演算子 `|>` と相性がいいです。
 
-先程の SimpleServer で、色々とミドルウェア的な処理をする関数プラグを追加してパイプで繋いでみます。
+先程の SimpleServer で、様々なミドルウェア的処理をする関数プラグを定義してパイプで繋ぐとこんな感じです。
 
 
-```diff elixir
+```diff elixir:lib/simple_server.ex
 defmodule SimpleServer do
   @behaviour Plug
 
@@ -140,36 +143,41 @@ defmodule SimpleServer do
   def init(options), do: options
 
   def call(conn, _options) do
-+    conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
++   conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
   end
 
-+  def parse_query(conn, _opts \\ []) do
-+    queries = conn.query_string |> URI.decode_query()
-+    conn |> assign(:queries, queries)
-+  end
++ def parse_query(conn, _opts \\ []) do
++   queries = conn.query_string |> URI.decode_query()
++   conn |> assign(:queries, queries)
++ end
 +
-+  def auth(conn, _opts \\ []) do
-+    case conn.assigns[:queries] do
-+      %{"id" => "user", "password" => "password"} -> conn
-+      _ -> conn |> send_resp(401, "Unauthorized") |> halt()  # Plug.Conn.halt/1 関数は、 以降の plug の呼び出しを停止してレスポンスを返す
-+    end
-+  end
++ def auth(conn, _opts \\ []) do
++   case conn.assigns[:queries] do
++     %{"id" => "user", "password" => "password"} -> conn
++     _ -> conn |> send_resp(401, "Unauthorized") |> halt()  # Plug.Conn.halt/1 関数は、 以降の plug の呼び出しを停止してレスポンスを返す
++   end
++ end
 +
-+  def set_content_type(conn, type) do
-+    conn |> put_resp_header("content-type", type)
-+  end
++ def set_content_type(conn, type) do
++   conn |> put_resp_header("content-type", type)
++ end
 +
-+  def route(conn, _opts \\ []) do
-+    case conn.request_path do
-+      "/" -> conn |> send_resp(200, "Hello, world!")
-+      _ -> conn |> send_resp(501, "Not implemented")
-+    end
-+  end
++ def route(conn, _opts \\ []) do
++   case {conn.method, conn.request_path} do
++      {"GET", "/"} -> conn |> send_resp(200, "Hello, world!")
++      {"GET", "/hello"} -> conn |> send_resp(200, "Hello, #{conn.assigns[:queries].id}!")
++      _ -> conn |> send_resp(404, "Path not found")
++   end
++ end
 end
+
+# $curl http://localhost:4000 => Unauthorized
+# $curl 'http://localhost:4000?id=user&password=password' => Hello, world!
+# $curl 'http://localhost:4000/some_path?id=user&password=password' => Path not found
 ```
 
 Plug の概念は以上です
-マクロとか出てきますが、大体はモジュールプラグと関数プラグの概念だけで Plug を使ったアプリケーションを書くことができます。
+マクロを使わずモジュールプラグと関数プラグの概念だけでも Plug を使ったアプリケーションを書くことができます。
 
 
 
@@ -181,104 +189,113 @@ Plug の概念は以上です
 - サーバー起動時のエントリーモジュールプラグの指定
 - マクロを使用したプラグの構築
 
-また、よく再利用する
+:::message
+試した・見かけた限りでは上記ですが、他にもあったら教えて下さい
+:::
 
 
 ## Plug を簡潔に書くためのマクロ
 
 モジュールプラグの実装が簡潔になるマクロがいくつかあります。
+特によく使う `Plug.Builder` および `Plug.Router` について見ていきましょう。
 
-### Plug.Builder
+### Plug.Builder (= plug/2)
+
+プラグパイプラインを書くのに使えるマクロが提供されます。
 
 
 ```diff elixir
 defmodule SimpleServer do
--  @behaviour Plug
+- @behaviour Plug
 -
--  import Plug.Conn
+- import Plug.Conn
 -
--  def init(options), do: options
+- def init(options), do: options
 -
--  def call(conn, _options) do
--    conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
--  end
-+  use Plug.Builder
+- def call(conn, _options) do
+-   conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
+- end
++ use Plug.Builder
 +
-+  plug(:parse_query)
-+  plug(:auth)
-+  plug(:set_content_type, "text/plain")
-+  plug(:route)
++ plug(:parse_query)
++ plug(:auth)
++ plug(:set_content_type, "text/plain")
++ plug(:route)
   ...
 end
 ```
 
 use ディレクティブの説明に関しては[ここを見るのがおすすめ](https://elixir-lang.jp/getting-started/alias-require-and-import.html#use)
 
-先の例で書いた例から `init/1` と `call/2`関数が削除されていますが、SimpleServerモジュールは依然として Plug として動作します。
-これらの関数は `use Plug.Builder` により自動で定義されるためです。
+先に書いた実装から `init/1` と `call/2`コールバック関数が削除されていますが、SimpleServerモジュールは依然として Plug として動作します。
+これらの関数が `use Plug.Builder` により自動で実装されるためです。
 
 
-特に重要なのが `plug/2` マクロで、上から順にプラグをパイプした結果を `call/2` 関数として出力します
-`plug/2` マクロは関数/モジュールプラグ両方をパイプすることができます
+特に重要なのが `plug/2` マクロで、上から順にプラグをパイプした結果を `call/2` 関数として出力します。
+また、関数プラグ/モジュールプラグの両方をパイプすることができます
 (パイプ演算子`|>`だと関数しかできない)
 
 ```elixir
-plug(:func_plug, some_option: value) # 関数プラグ、 atom で指定する
-plug(ModulePlug, some_option: value) # モジュールプラグ
+# 例
+plug(:func_plug, options) # 関数名は atom で指定する
+plug(ModulePlug, options)
 ```
 
 
-### Plug.Router
+### Plug.Router (= get/3, post/3, match/3, etc...)
+
+HTTPメソッド、パスによるルーティングに便利なマクロが提供されます
+
 
 ```diff elixir
 defmodule SimpleServer do
--  use Plug.Builder
-+  use Plug.Router
-
-  ...
--  plug(:route)
-+  plug(:match)
-+  plug(:dispatch)
+- use Plug.Builder
++ use Plug.Router
 
   ...
 
--  def route(conn, _opts \\ []) do
--    case conn.request_path do
--      "/" -> conn |> send_resp(200, "Hello, world!")
--      _ -> conn |> send_resp(404, "Path not found")
--    end
--  end
+- plug(:route)
++ plug(:match)
++ plug(:dispatch)
 
-+  get "/" do
-+    conn |> send_resp(200, "Hello, world!")
-+  end
+  ...
+
+- def route(conn, _opts \\ []) do
+-   case {conn.method, conn.request_path} do
+-     {"GET", "/"} -> conn |> send_resp(200, "Hello, world!")
+-     {"GET", "/hello"} -> conn |> send_resp(200, "Hello, #{conn.assigns[:queries].id}!")
+-     _ -> conn |> send_resp(404, "Path not found")
+-   end
+- end
+
++ get "/" do
++   conn |> send_resp(200, "Hello, world!")
++ end
 +
-+  get "/hello" do
-+    conn |> send_resp(200, "Hello, #{conn.assigns[:queries].id}!")
-+  end
++ get "/hello" do
++   conn |> send_resp(200, "Hello, #{conn.assigns[:queries].id}!")
++ end
 +
-+  match _ do
-+    conn |> send_resp(404, "Path not found")
-+  end
++ # match は全ての HTTP メソッドにマッチし、かつパスに _ を指定すると全てのパスにマッチする。 (どのルートにもマッチしなかった場合のデフォルトを定義する)
++ match _ do
++   conn |> send_resp(404, "Path not found")
++ end
 end
 ```
 
 `Router` は `Builder` の上に構築され、更に拡張されています。
-`plug/2` マクロは引き続き使えて、URLパスとHTTPメソッドによるルーティングを行うためのマクロが追加されています(get, post, put, patch, delete...)
+`plug/2` マクロは引き続き使えて、URLパスとHTTPメソッドによるルーティングを行うためのマクロが追加されています(`get/3`, `post/3`, `put/3`, `patch/3`, `delete/3`...)
 
 
 まず、ルーティングを行う2つの関数プラグを plug します
 (`use Plug.Router` により自動で実装されます)
 
-- `match/2` : 一致するルートを検索して、マッチしたプラグ関数を `dispatch` に渡す (`conn.private`に値をセットして渡す)
+- `match/2` : 一致するルートを検索する (= `conn.private`にプラグ関数をセットして渡す)
 - `dispatch/2` : 渡されたプラグ関数を実行してリクエストを最終的に処理する
 
-その後に、メソッドに対応したマクロ (`get/3` など)で、指定したルートを処理する関数プラグ処理を書く事ができます。
-`do_match/4` プライベート関数に展開され、Elixir の関数コール時のパターンマッチングを利用して高速にルーティングされるようです。
-
-
-マクロが展開されると以下の様な感じになります
-(Elixirのマクロをきれいなコードに展開する方法がないので、おおよそこんな感じくらいです)
+その後に、`get/3`, `post/3` マクロなどで、ルートごとの処理を定義する事ができます。
+定義されたルートは、Elixir の関数呼び出しパターンマッチングを利用して高速にルーティングされるようです。
+(マクロを展開すると、大体↓のような感じになると思われます)
 
 ```diff elixir
 defmodule SimpleServer do
@@ -286,25 +303,28 @@ defmodule SimpleServer do
 -  plug(:match)
 -  plug(:dispatch)
 -
--  get "/" do ...
--
--  get "/hello" do ...
--
--  match _ do ...
-
+-  get "/", do: conn |> send_resp(200, "Hello, world!")
+-  get "/hello", do: conn |> send_resp(200, "Hello,#{conn.assigns[:queries].id}!")
+-  match _, do: conn |> send_resp(404, "Path not found")
++ # マクロ展開後のイメージ
 +  def call(conn, opts) do
 +    conn
-+    |> # ...プラグパイプライン
-+    |> do_match(conn, conn.method, Plug.Router.Utils.decode_path_info!(conn), conn.host)
++    |> # ...その他のプラグパイプライン
++    |> match
 +    |> dispatch
++  end
++  
++  def match(conn, _opts) do
++    # do_match/4 の呼び出し (関数呼び出しのパターンマッチによりルーティングする)
++    do_match(conn, conn.method, Plug.Router.Utils.decode_path_info!(conn), conn.host)
 +  end
 +
 +  def dispatch(%Plug.Conn{assigns: assigns} = conn, _opts) do
 +    {_path, fun} = Map.fetch!(conn.private, :plug_route)
-+    fun.(conn) # 渡されたプラグ関数を実行する
++    # 最終的に、マッチしたルートの関数でリクエストを処理する
++    fun.(conn)
 +  end
 +  
-+  # 関数の引数によるパターンマッチを行い、ルーティングする
 +  defp do_match(conn, "GET", "", "localhost") do
 +    Plug.Conn.put_private(conn, :plug_route, {"", fn conn -> conn |> send_resp(200, "Hello, world!") end})
 +  end
@@ -313,7 +333,7 @@ defmodule SimpleServer do
 +    Plug.Conn.put_private(conn, :plug_route, {"hello", fn conn -> conn |> send_resp(200, "Hello,#{conn.assigns[:queries].id}!") end})
 +  end
 +
-+  defp do_match(conn, _, _path, host) do
++  defp do_match(conn, _method, _path, host) do
 +    Plug.Conn.put_private(conn, :plug_route, {_path, fn conn -> conn |> send_resp(404, "Path not found") end})
 +  end
 ...
@@ -323,12 +343,14 @@ end
 ## まとめ
 
 
-他にも色々ありますが、 Plug の重要な概念や頻出の挙動はこんなところでしょうか。
+他にも色々ありますが、 Plug の基本的な概念や頻出の挙動はこんなところでしょうか。
 
-Phoenix では更に拡張された Plug のマクロも出てきます。
-知らないマクロが出てきても Plug の基本的な考え方を知っていれば、最終的にはモジュールプラグか関数プラグに変換されて、パイプやパターンマッチなどElixirの標準的な機能で処理されているんだな、ということがわかると思います。
+Phoenix では更に拡張された Plug マクロも出てきます。
+知らないマクロが出てきても Plug の基本的な考え方を知っていれば、最終的にはモジュールプラグか関数プラグに変換されて、パイプやパターンマッチなどElixirの標準的な機能で処理されているんだな〜、と推測できそうです。
+基本が大事！
 
-Elixir を学ぶ人は大半の場合、 Phoenix を試してスタータープロジェクトにある謎の記述に圧倒されると思いますが(自分もそうでした)、フレームワークというのはライブラリの集合なので、一つ一つ使い方を理解していくと驚きも減ると思われます。
+Elixir を学ぶ人の大半は Phoenix が目当てで、試しにスタータープロジェクトを作ったらそこにある謎のマクロ記述に圧倒されると思いますが(自分もそうでした)、フレームワークというのはライブラリの集合なので一つ一つ使い方を理解していくと驚きも減ると思われます。
+
 
 自分も勉強中ですが、この記事がお役に立てば幸いです👋
 
