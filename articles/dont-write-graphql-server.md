@@ -3,7 +3,7 @@ title: "GraphQLのコード書くのをやめた - Postgraphile"
 emoji: "👋"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [postgraphile, GraphQL, nodejs, PostgreSQL]
-published: true
+published: false
 ---
 
 # TL;DR
