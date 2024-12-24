@@ -144,7 +144,11 @@ defmodule SimpleServer do
   def init(options), do: options
 
   def call(conn, _options) do
-+   conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
++    try do
++      conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
++    catch
++      :unauthorized -> conn |> send_resp(401, "Unauthorized")
++    end
   end
 
 + def parse_query(conn, _opts \\ []) do
@@ -155,7 +159,7 @@ defmodule SimpleServer do
 + def auth(conn, _opts \\ []) do
 +   case conn.assigns[:queries] do
 +     %{"id" => "user", "password" => "password"} -> conn
-+     _ -> conn |> send_resp(401, "Unauthorized") |> halt()  # Plug.Conn.halt/1 関数は、 以降の plug の呼び出しを停止してレスポンスを返す
++     _ -> throw(:unauthorized)
 +   end
 + end
 +
@@ -214,7 +218,7 @@ defmodule SimpleServer do
 - def init(options), do: options
 -
 - def call(conn, _options) do
--   conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
+-   # ...
 - end
 + use Plug.Builder
 +
@@ -223,7 +227,15 @@ defmodule SimpleServer do
 + plug(:set_content_type, "text/plain")
 + plug(:route)
   ...
-end
+
+  def auth(conn, _opts \\ []) do
+    case conn.assigns[:queries] do
+      %{"id" => "user", "password" => "password"} -> conn
+-     _ -> throw(:unauthorized)
++     _ -> conn |> send_resp(401, "Unauthorized") |> halt()
+    end
+  end
+  ...
 ```
 
 use ディレクティブの説明に関しては[ここを見るのがおすすめ](https://elixir-lang.jp/getting-started/alias-require-and-import.html#use)
@@ -241,6 +253,9 @@ use ディレクティブの説明に関しては[ここを見るのがおすす
 plug(:func_plug, options) # 関数名は atom で指定する
 plug(ModulePlug, options)
 ```
+
+また、 `Plug.Conn.halt/1` は `pipe/2`マクロにより構築されるプラグパイプラインを途中で中断できます。
+`throw ~ catch` を書いて抜ける必要がなくなりました。
 
 
 ### Plug.Router (= get/3, post/3, match/3, etc...)
