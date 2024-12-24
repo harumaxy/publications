@@ -4,6 +4,7 @@ emoji: "🔌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["elixir", "plug", "phoenix"]
 published: false
+publication_name: "manabo_tech"
 ---
 
 
