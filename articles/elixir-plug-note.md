@@ -184,24 +184,41 @@ end
 Plug の概念は以上です
 マクロを使わずモジュールプラグと関数プラグの概念だけでも Plug を使ったアプリケーションを書くことができます。
 
+#### 関数プラグをエントリーポイントにする
+
+Bandit サーバー起動時の最初に呼ばれる Plug を、モジュールプラグから関数プラグに変えることも可能です。
 
 
-### モジュールプラグ vs 関数プラグ
+```elixir
+defmodule SimpleServer.Application do
+...
+  @impl true
+  def start(_type, _args) do
+    children = [
+-     {Bandit, plug: SimpleServer, port: 4000}
++     {Bandit, plug: &SimpleServer.call/2, port: 4000}
+    ]
+...
+```
 
-ぱっと見、関数プラグのほうがメンタルモデルに合っていてかつ単純なので、モジュールプラグを使う必要性は無いように感じます。
-が、モジュールプラグでしかできないこともあります。
+または、無名関数プラグにすることも可能です
 
-- サーバー起動時のエントリーモジュールプラグの指定
-- マクロを使用したプラグの構築
-
-:::message
-試した・見かけた限りでは上記ですが、他にもあったら教えて下さい
-:::
-
+```elixir
+defmodule SimpleServer.Application do
+...
+  @impl true
+  def start(_type, _args) do
+    children = [
++     {Bandit, plug: fn conn, _opts -> Plug.Conn.send_resp(conn, 200, "Hello, world!") end, port: 4000}
+    ]
+...
+```
 
 ## Plug を簡潔に書くためのマクロ
 
-モジュールプラグの実装が簡潔になるマクロがいくつかあります。
+ぱっと見、関数プラグのほうがメンタルモデルに合っていてかつ単純なので、モジュールプラグを使う必要性は無いように感じます。
+
+が、モジュールプラグとマクロを組み合わせることで、 Plug の実装が簡潔になる方法がいくつかあります。
 特によく使う `Plug.Builder` および `Plug.Router` について見ていきましょう。
 
 ### Plug.Builder (= plug/2)
