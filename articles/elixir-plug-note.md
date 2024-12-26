@@ -335,7 +335,7 @@ defmodule SimpleServer do
 +    do_match(conn, conn.method, Plug.Router.Utils.decode_path_info!(conn), conn.host)
 +  end
 +
-+  def dispatch(%Plug.Conn{assigns: assigns} = conn, _opts) do
++  def dispatch(conn, _opts) do
 +    {_path, fun} = Map.fetch!(conn.private, :plug_route)
 +    # 最終的に、マッチしたルートの関数でリクエストを処理する
 +    fun.(conn)
