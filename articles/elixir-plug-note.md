@@ -189,7 +189,7 @@ Plug の概念は以上です
 Bandit サーバー起動時の最初に呼ばれる Plug を、モジュールプラグから関数プラグに変えることも可能です。
 
 
-```elixir
+```diff elixir
 defmodule SimpleServer.Application do
 ...
   @impl true
@@ -203,7 +203,7 @@ defmodule SimpleServer.Application do
 
 または、無名関数プラグも可能です
 
-```elixir
+```diff elixir
 defmodule SimpleServer.Application do
 ...
   @impl true
@@ -235,7 +235,11 @@ defmodule SimpleServer do
 - def init(options), do: options
 -
 - def call(conn, _options) do
--   # ...
+-    try do
+-      conn |> parse_query() |> auth() |> set_content_type("text/plain") |> route()
+-    catch
+-      :unauthorized -> conn |> send_resp(401, "Unauthorized")
+-    end
 - end
 + use Plug.Builder
 +
