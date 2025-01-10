@@ -3,7 +3,7 @@ title: "[Elixir] Plug を簡単なサーバーを実装して理解する"
 emoji: "🔌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["elixir", "plug", "phoenix"]
-published: false
+published: true
 publication_name: "manabo_tech"
 ---
 
