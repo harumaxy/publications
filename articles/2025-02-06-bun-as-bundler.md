@@ -1,5 +1,5 @@
 ---
-title: "Bun でフロントエンド開発できそう"
+title: "Bun がフロントエンド開発でかなり便利になりそう"
 emoji: "🥟"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["bun", "javascript", "typescript", "react", "tailwindcss"]
