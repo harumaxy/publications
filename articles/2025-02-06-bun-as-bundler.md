@@ -6,13 +6,19 @@ topics: ["bun", "typescript", "react", "tailwindcss", "hono"]
 published: true
 ---
 
-皆さんご存知の JavaScript ランタイム兼開発ツールの `Bun` が、v1.2.3 でめっちゃ便利な機能が使えるようになったので取り急ぎ。
+皆さんご存知の JavaScript ランタイム兼開発ツールの `Bun` が、v1.2.3 でフロントエンド開発のための便利な機能が使えるようになったので取り急ぎ。
 
 現時点(2025/02/06)では Canary build なので試す方は以下のコマンドを実行してください。
 
 ```sh
 bun upgrade
 ```
+
+Bun でビルドした実際に動作する React + Tailwind CSS の SPA の URL を貼っておきます。
+
+https://harumaxy.github.io/bun-as-bundler
+(repo: https://github.com/harumaxy/bun-as-bundler)
+
 
 
 ## 開発サーバー機能
@@ -141,7 +147,7 @@ React を簡単に使用することが出来ました！
 通常は `bun build index.html` でもできるのですが、 Tailwind を使用しているため、ビルドスクリプトを書くことでプラグインを適用しつつバンドルします。
 
 ```sh
-touch build.tsx
+touch build.ts
 ```
 
 ```ts:build.ts
