@@ -2,7 +2,7 @@
 title: "Bun がフロントエンド開発でかなり便利になりそう"
 emoji: "🥟"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["bun", "javascript", "typescript", "react", "tailwindcss"]
+topics: ["bun", "typescript", "react", "tailwindcss", "hono"]
 published: true
 ---
 
@@ -40,9 +40,9 @@ bun index.html
 
 CSS, JavaScript などのモジュールを HTML ファイルにバンドルすることが出来ます。
 
-### Tailwind プラグイン
+### Tailwind CSS を使う
 
-まず Tailwind を試してみます。
+まず Tailwind CSS を試してみます。
 package.json を初期化して、 `bun-plugin-tailwind` をインストールします。
 
 ```sh
@@ -78,10 +78,12 @@ plugins = ["bun-plugin-tailwind"]
 ...
 ```
 
-そして、開発サーバーを立ててページを開くと Tailwind クラスのスタイルが当たっていることが確認できます。
+そして、開発サーバーを立ててページを開くと Tailwind CSS のスタイルが適用されています。
 
 
 ### UIフレームワークを使う (React)
+
+まずは NPM パッケージをインストール。
 
 ```sh
 bun add react react-dom
@@ -186,6 +188,7 @@ Bun では HTML ファイルをモジュールとしてインポート可能で�
 
 また、 Web 標準の `fetch` メソッド（`Request` を引数にして `Response` を返す）で HTTP リクエストを処理することも出来ます。
 
+また、**Hono** など、Bun と同様に Web 標準に準拠した `fetch` メソッドを提供するサーバーフレームワークを組み込むことも可能です。
 
 ```ts:src/server.ts
 import index from "../index.html";  // HTML インポートが可能
