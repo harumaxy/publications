@@ -193,8 +193,7 @@ Bun では HTML ファイルをモジュールとしてインポート可能で�
 `Bun.serve()` API の `static` ルートとして設定することで、バンドルした HTML ファイルを Web サーバーから配信することが出来ます。（詳しくは[ここ](https://bun.sh/docs/bundler/fullstack#html-imports-are-routes)）
 
 また、 Web 標準の `fetch` メソッド（`Request` を引数にして `Response` を返す）で HTTP リクエストを処理することも出来ます。
-
-また、**Hono** など、Bun と同様に Web 標準に準拠した `fetch` メソッドを提供するサーバーフレームワークを組み込むことも可能です。
+**Hono** など、Bun と同様に Web 標準に準拠した `fetch` メソッドを提供するサーバーフレームワークを組み込むことも可能です。
 
 ```ts:src/server.ts
 import index from "../index.html";  // HTML インポートが可能
@@ -236,6 +235,8 @@ console.log("Server is running on http://localhost:3000");
 将来的には Vite などを置き換える選択肢となって、Bun 以外の依存を必要とせずフロントエンド開発ができるようになるかもしれません。
 
 ## 参考
+
+https://bun.sh/docs/bundler/fullstack
 
 https://bun.sh/docs/bundler/html
 
