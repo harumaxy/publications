@@ -11,8 +11,13 @@ published: true
 現時点(2025/02/06)では Canary build なので試す方は以下のコマンドを実行してください。
 
 ```sh
-bun upgrade
+bun upgrade --canary
 ```
+
+:::message
+追記: Canary バージョンにアップグレードするには `--canary` フラグが必要です。
+:::
+
 
 Bun でビルドした実際に動作する React + Tailwind CSS の SPA の URL を貼っておきます。
 
