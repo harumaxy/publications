@@ -187,7 +187,7 @@ bun build index.html about.html blog.html --outdir dist
 ```
 
 
-## サーバーから Web ページを配信する
+## Web サーバーから配信する (+ バックエンドAPI実装)
 
 Bun では HTML ファイルをモジュールとしてインポート可能です。
 `Bun.serve()` API の `static` ルートとして設定することで、バンドルした HTML ファイルを Web サーバーから配信することが出来ます。（詳しくは[ここ](https://bun.sh/docs/bundler/fullstack#html-imports-are-routes)）
@@ -207,7 +207,7 @@ app.get("/hono", (c) => c.text("This is Hono response"));
 
 Bun.serve({
   development: true,  // リクエストのたびにリビルドするなど。開発時に便利。
-  static: {
+  static: {  // バンドルした静的 HTML ページを配信する
     "/": index,
     "/about": about,
   },
