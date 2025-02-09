@@ -219,7 +219,7 @@ Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
 
-    // Hono アプリでレスポンスをハンドル
+    // Hono アプリでリクエストをハンドル
     if (url.pathname === "/hono") {
       return honoApp.fetch(req);
     }
