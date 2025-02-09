@@ -206,9 +206,9 @@ import index from "../index.html";  // HTML インポートが可能
 import about from "../about.html";
 import { Hono } from "hono";
 
-const app = new Hono();
+const honoApp = new Hono();
 
-app.get("/hono", (c) => c.text("This is Hono response"));
+honoApp.get("/hono", (c) => c.text("This is Hono response"));
 
 Bun.serve({
   development: true,  // リクエストのたびにリビルドするなど。開発時に便利。
@@ -221,7 +221,7 @@ Bun.serve({
 
     // Hono アプリでレスポンスをハンドル
     if (url.pathname === "/hono") {
-      return app.fetch(req);
+      return honoApp.fetch(req);
     }
 
     // Web 標準的の Response オブジェクトを返すことも可能
