@@ -218,10 +218,14 @@ Bun.serve({
   },
   async fetch(req) {
     const url = new URL(req.url);
+
+    // Hono アプリでレスポンスをハンドル
     if (url.pathname === "/hono") {
-      return app.fetch(req); // Hono アプリケーションでレスポンスをハンドル
+      return app.fetch(req);
     }
-    return new Response("This is default response"); // 標準的な Response オブジェクトを返すことも可能
+
+    // Web 標準的の Response オブジェクトを返すことも可能
+    return new Response("This is default response");
   },
 });
 
