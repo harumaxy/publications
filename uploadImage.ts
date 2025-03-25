@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run --allow-env --allow-read --allow-net --allow-run
-import AWS from "npm:aws-sdk";
+import AWS from "aws-sdk";
 import * as cb from "https://deno.land/x/copy_paste/mod.ts";
 
 // setup

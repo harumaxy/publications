@@ -8,6 +8,7 @@
 
 module.exports = {
   rules: {
+    
     // https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing
     "preset-ja-technical-writing": {
       "no-exclamation-question-mark": false, // 感嘆符と疑問符の使用を許可
@@ -15,6 +16,7 @@ module.exports = {
       "ja-no-weak-phrase": false, // 弱い表現の許容
       "ja-no-mixed-period": false, // 文末の記号の混在を許容
       "sentence-length": { max: 150 }, // 文の長さを緩和
+      "max-comma": {max: 100},
     },
 
     // https://github.com/textlint-ja/textlint-rule-preset-JTF-style

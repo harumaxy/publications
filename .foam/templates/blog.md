@@ -6,5 +6,5 @@ thumbnail: null # https://blog-images.harumaxy.com/*.png
 draft: false
 tags: []
 foam_template: 
-  filepath: "blog/$FOAM_DATE_YEAR/$FOAM_DATE_MONTH_NAME_SHORT/$FOAM_TITLE.$FOAM_DATE_YEAR-$FOAM_DATE_MONTH-$FOAM_DATE_DATE.md"
+  filepath: "blog/$FOAM_DATE_YEAR/$FOAM_DATE_MONTH月/$FOAM_TITLE.$FOAM_DATE_YEAR-$FOAM_DATE_MONTH-$FOAM_DATE_DATE.md"
 ---

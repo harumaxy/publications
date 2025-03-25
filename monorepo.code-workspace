@@ -12,9 +12,12 @@
     },
     {
       "path": "articles/"
+    },
+    {
+      "path": "learn/"
     }
   ],
   "settings": {
     "biome.enabled": true
-  },
+  }
 }
