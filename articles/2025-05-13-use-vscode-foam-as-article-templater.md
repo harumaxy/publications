@@ -49,6 +49,8 @@ root
 [https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-template](https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-template)
 [https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-templater](https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-templater)
 
+`↑ 1文字違いで、 最後が ⭕template ❌templater になってる`
+
 **痛みを伴わず**、最初から**いい感じ**のスラッグで記事を作成したい！と思いませんか？
 
 ## Zenn CLI だけでなんとかできるのか？ => できるがメンドい
