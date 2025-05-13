@@ -46,8 +46,8 @@ root
 スラッグの決定だけは、後から変えが利かない...ので、めんどくさがって後から返るか〜とやると悲しい気持ちになります。
 (この記事のスラッグで検証済みです)
 
-https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-template
-https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-templater
+[https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-template](https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-template)
+[https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-templater](https://zenn.dev/submax/articles/2025-05-13-use-vscode-foam-as-article-templater)
 
 **痛みを伴わず**、最初から**いい感じ**のスラッグで記事を作成したい！と思いませんか？
 
