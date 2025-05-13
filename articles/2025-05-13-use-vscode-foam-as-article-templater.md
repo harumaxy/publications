@@ -3,7 +3,7 @@ title: "Zenn の記事を書くときのスラグ生成を楽にする [VSCode +
 emoji: "🪽"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [vscode, foam, zenn]
-published: true
+published: false
 ---
 
 表題のとおりです。
