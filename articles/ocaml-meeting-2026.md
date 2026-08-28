@@ -1,7 +1,7 @@
 ---
 title: "OCaml Meeting 2026 in Tokyo に行ってきた"
 emoji: "🐫"
-type: "tech" # tech: 技術記事 / idea: アイデア
+type: "tech"
 topics: ["ocaml", "関数型プログラミング", "勉強会"]
 published: true
 ---
